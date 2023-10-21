@@ -40,7 +40,6 @@ public class UdpServer {
                 System.out.println("Received from " + senderAddress + ":" + senderPort + " - " + receivedMessage);
                 if (receivedMessage.equals("1;")) {
                     UdpClient.sendUdpRequest();
-                    UdpServer.stop();
                 }
             }
         } catch (Exception e) {

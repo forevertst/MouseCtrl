@@ -1,6 +1,8 @@
 package com.tst.transform;
 
 import com.tst.pojo.Point;
+import com.tst.process.ProcessManager;
+import com.tst.utils.Mouse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,19 +10,23 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
+import java.util.Objects;
 
 import static com.tst.common.Data.movePointList;
 import static java.lang.Thread.sleep;
 
 public class TcpServer implements Runnable {
     int port;
+    public boolean isConntct = false;
+
     TcpServer(int p) {
         port = p;
     }
 
-    ServerSocket serverSocket;
+    public ServerSocket serverSocket;
 
     void handleClient(Socket clientSocket) {
+        isConntct = true;
         try {
             InputStream inputStream;
             inputStream = clientSocket.getInputStream();
@@ -38,9 +44,17 @@ public class TcpServer implements Runnable {
                 List<String> list = List.of(message.split(";"));
                 list.forEach(position -> {
                     List<String> list2 = List.of(position.split(","));
-                    if (list2.size() > 1) {
-                        Point newP = new Point((int) Float.parseFloat(list2.get(0)), (int) Float.parseFloat(list2.get(1)));
-                        movePointList.add(newP);
+                    if (list2.size() > 0) {
+                        if (Objects.equals(list2.get(0), "mouseMove")) {
+                            if (list2.size() > 2) {
+                                Point newP = new Point((int) Float.parseFloat(list2.get(1)), (int) Float.parseFloat(list2.get(2)));
+                                movePointList.add(newP);
+                            }
+                        } else if (Objects.equals(list2.get(0), "mouseClick")) {
+                            Mouse.click();
+                        } else if (Objects.equals(list2.get(0), "mousePosInit")) {
+                            ProcessManager.resetMousePos();
+                        }
                     }
                 });
             }
@@ -48,7 +62,7 @@ public class TcpServer implements Runnable {
             System.out.println("客户端断开连接：" + clientSocket.getInetAddress());
             // 关闭连接
             clientSocket.close();
-            UdpManager.startUdpServer();
+            isConntct = false;
         } catch (Exception e) {
             e.printStackTrace();
         }
