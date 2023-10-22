@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,7 +40,7 @@ public class TcpServer implements Runnable {
 
 
             while ((bytesRead = inputStream.read(buffer)) != -1) {
-                System.out.println(String.valueOf(bytesRead));
+//                System.out.println(String.valueOf(bytesRead));
                 String message = new String(buffer, 0, bytesRead);
                 System.out.println("Received from client: " + message);
 
@@ -99,8 +100,9 @@ public class TcpServer implements Runnable {
                 Thread clientThread = new Thread(() -> handleClient(clientSocket));
                 clientThread.start();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+//            e.printStackTrace();
+            System.out.println("Tcp server in exception, mainly caused by socket closed!");
         }
     }
 }
