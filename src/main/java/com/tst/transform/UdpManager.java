@@ -1,5 +1,7 @@
 package com.tst.transform;
 
+import com.tst.global.Data;
+
 import static java.lang.Thread.sleep;
 
 
@@ -11,7 +13,7 @@ public class UdpManager {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                udpServer = new UdpServer(5001,"1;");
+                udpServer = new UdpServer(5001, "1;");
                 udpServer.init();
             }
         });
@@ -23,12 +25,15 @@ public class UdpManager {
         udpServer.stop();
     }
 
-    public static void startUdpClient(){
-        udpClient = new UdpClient(5002,"192.168.2.11","2;");
+    public static void startUdpClient() {
+        String ip = Data.ipAddress;
+        udpClient = new UdpClient(5002, ip, "2;");
     }
-    public static void udpClientSend(){
+
+    public static void udpClientSend() {
         udpClient.sendUdpRequest();
     }
+
     public static void stopUdpClient() {
         udpClient.cancel();
     }

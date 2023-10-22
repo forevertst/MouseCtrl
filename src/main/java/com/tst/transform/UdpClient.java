@@ -15,7 +15,11 @@ public class UdpClient {
         this.message = message;
         try {
             // 创建一个 DatagramSocket 对象，不需要指定目标主机和端口
-            socket = new DatagramSocket(5002, InetAddress.getByName(netAddressName));
+            if (netAddressName == null) {
+                socket = new DatagramSocket(5002);
+            } else {
+                socket = new DatagramSocket(5002, InetAddress.getByName(netAddressName));
+            }
         } catch (
                 IOException e) {
             e.printStackTrace();

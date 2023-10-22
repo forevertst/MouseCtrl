@@ -1,5 +1,6 @@
 package com.tst;
 
+import com.tst.global.Data;
 import com.tst.global.UI;
 import com.tst.process.ProcessManager;
 import com.tst.transform.TcpManager;
@@ -10,6 +11,13 @@ import com.tst.transform.UdpManager;
  */
 public class App {
     public static void main(String[] args) {
+        // 获取命令行参数
+        if (args.length > 0) {
+            Data.ipAddress = args[0];
+        }
+        for (int i = 0; i < args.length; i++) {
+            System.out.println("参数 " + (i + 1) + ": " + args[i]);
+        }
         new UI();
         TcpManager.startTcpServer();
         UdpManager.startUdpServer();

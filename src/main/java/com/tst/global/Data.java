@@ -7,4 +7,5 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Data {
     public static List<Point> movePointList = new CopyOnWriteArrayList<>();
+    public static String ipAddress;
 }
