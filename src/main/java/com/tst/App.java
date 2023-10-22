@@ -1,5 +1,6 @@
 package com.tst;
 
+import com.tst.global.UI;
 import com.tst.process.ProcessManager;
 import com.tst.transform.TcpManager;
 import com.tst.transform.UdpManager;
@@ -9,6 +10,7 @@ import com.tst.transform.UdpManager;
  */
 public class App {
     public static void main(String[] args) {
+        new UI();
         TcpManager.startTcpServer();
         UdpManager.startUdpServer();
         UdpManager.startUdpClient();
