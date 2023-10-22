@@ -3,14 +3,24 @@ package com.tst.process;
 import com.tst.pojo.Point;
 import com.tst.utils.Mouse;
 
-import static com.tst.common.Data.movePointList;
+import static com.tst.global.Data.movePointList;
 
-public class MouseMoveThread implements Runnable {
+public class MouseMoveHandler implements Runnable {
     public Point last;
-
+    boolean stopFlag = false;
+    public void resetMousePos() {
+        this.last = null;
+    }
+    public void stop() {
+        stopFlag =true;
+    }
     @Override
     public void run() {
         while (true) {
+            if(stopFlag)
+            {
+                break;
+            }
             if (!movePointList.isEmpty()) {
                 Point point = movePointList.get(0);
                 if (last == null) {
@@ -24,6 +34,5 @@ public class MouseMoveThread implements Runnable {
                 movePointList.remove(0);
             }
         }
-
     }
 }

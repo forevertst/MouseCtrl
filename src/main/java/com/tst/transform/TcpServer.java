@@ -6,18 +6,18 @@ import com.tst.utils.Mouse;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
 import java.util.Objects;
 
-import static com.tst.common.Data.movePointList;
+import static com.tst.global.Data.movePointList;
 import static java.lang.Thread.sleep;
 
 public class TcpServer implements Runnable {
     int port;
-    public boolean isConntct = false;
+
+    boolean isConntct = false;
 
     TcpServer(int p) {
         port = p;
@@ -25,11 +25,14 @@ public class TcpServer implements Runnable {
 
     public ServerSocket serverSocket;
 
+    public boolean isConntct() {
+        return isConntct;
+    }
+
     void handleClient(Socket clientSocket) {
         isConntct = true;
         try {
-            InputStream inputStream;
-            inputStream = clientSocket.getInputStream();
+            InputStream inputStream = clientSocket.getInputStream();
 
             byte[] buffer = new byte[1024];
             int bytesRead;
@@ -49,9 +52,13 @@ public class TcpServer implements Runnable {
                             if (list2.size() > 2) {
                                 Point newP = new Point((int) Float.parseFloat(list2.get(1)), (int) Float.parseFloat(list2.get(2)));
                                 movePointList.add(newP);
+                            } else {
+                                System.out.println("wrongMove" + position);
                             }
-                        } else if (Objects.equals(list2.get(0), "mouseClick")) {
-                            Mouse.click();
+                        } else if (Objects.equals(list2.get(0), "mouseLeftClick")) {
+                            Mouse.leftClick();
+                        } else if (Objects.equals(list2.get(0), "mouseRightClick")) {
+                            Mouse.RightClick();
                         } else if (Objects.equals(list2.get(0), "mousePosInit")) {
                             ProcessManager.resetMousePos();
                         }
@@ -61,6 +68,7 @@ public class TcpServer implements Runnable {
             // 客户端断开连接
             System.out.println("客户端断开连接：" + clientSocket.getInetAddress());
             // 关闭连接
+            inputStream.close();
             clientSocket.close();
             isConntct = false;
         } catch (Exception e) {

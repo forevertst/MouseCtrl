@@ -4,18 +4,24 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
 public class UdpServer {
-    static DatagramSocket socket;
-    static boolean stopFlag = false;
+    DatagramSocket socket;
+    boolean stopFlag = false;
+    int port;
+    String listenMessage;
 
-    public static void stop() {
+    UdpServer(int port, String listenMessage) {
+        this.port = port;
+        this.listenMessage = listenMessage;
+    }
+
+    public void stop() {
         stopFlag = true;
     }
 
-    public static void init() {
+    public void init() {
         try {
             stopFlag = false;
             // 创建 DatagramSocket 绑定到指定端口
-            int port = 5001;
             socket = new DatagramSocket(port);
 
             System.out.println("UDP Server is running on port " + port);
@@ -38,8 +44,9 @@ public class UdpServer {
                 int senderPort = receivePacket.getPort();
 
                 System.out.println("Received from " + senderAddress + ":" + senderPort + " - " + receivedMessage);
-                if (receivedMessage.equals("1;")) {
-                    UdpClient.sendUdpRequest();
+
+                if (receivedMessage.equals(listenMessage)) {
+                    UdpManager.udpClientSend();
                 }
             }
         } catch (Exception e) {

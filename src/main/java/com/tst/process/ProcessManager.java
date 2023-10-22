@@ -1,15 +1,19 @@
 package com.tst.process;
 
 public class ProcessManager {
-    static MouseMoveThread mouseMoveThread;
+    static MouseMoveHandler mouseMoveHandler;
 
     public static void resetMousePos() {
-        mouseMoveThread.last = null;
+        mouseMoveHandler.resetMousePos();
     }
 
-    public static void startMouseMoveThread() {
-        mouseMoveThread = new MouseMoveThread();
-        Thread thread = new Thread(mouseMoveThread);
+    public static void startMouseMoveHandlerThread() {
+        mouseMoveHandler = new MouseMoveHandler();
+        Thread thread = new Thread(mouseMoveHandler);
         thread.start();
+    }
+
+    public static void stopMouseMoveHandlerThread() {
+        mouseMoveHandler.stop();
     }
 }

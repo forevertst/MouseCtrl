@@ -1,20 +1,19 @@
 package com.tst.transform;
 
 public class TcpManager {
-    static TcpServer tcpServerRunnable;
+    static TcpServer tcpServer;
 
     public static boolean isConnect() {
-        return tcpServerRunnable.isConntct;
-
+        return tcpServer.isConntct();
     }
 
     public static void startTcpServer() {
-        tcpServerRunnable = new TcpServer(5000);
-        Thread thread = new Thread(tcpServerRunnable);
+        tcpServer = new TcpServer(5000);
+        Thread thread = new Thread(tcpServer);
         thread.start();
     }
 
     public static void stopTcpClient() {
-        tcpServerRunnable.cancel();
+        tcpServer.cancel();
     }
 }

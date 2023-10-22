@@ -4,13 +4,15 @@ import static java.lang.Thread.sleep;
 
 
 public class UdpManager {
-    static boolean udpClientSendFlag = false;
+    static UdpClient udpClient;
+    static UdpServer udpServer;
 
     public static void startUdpServer() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                UdpServer.init();
+                udpServer = new UdpServer(5001,"1;");
+                udpServer.init();
             }
         });
         thread.setDaemon(true);
@@ -18,9 +20,16 @@ public class UdpManager {
     }
 
     public static void stopUdpServer() {
-        UdpServer.stop();
+        udpServer.stop();
+    }
+
+    public static void startUdpClient(){
+        udpClient = new UdpClient(5002,"192.168.2.11","2;");
+    }
+    public static void udpClientSend(){
+        udpClient.sendUdpRequest();
     }
     public static void stopUdpClient() {
-        UdpClient.cancel();
+        udpClient.cancel();
     }
 }
